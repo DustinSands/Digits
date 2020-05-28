@@ -15,7 +15,7 @@ import math
 import os
 
 # Where you want figures to be saved (if they are to be saved)
-fig_dir = r'C:\Users\Racehorse\Google Drive\Programming\ML\figs'
+fig_dir = r'C:\Users\Racehorse\Google Drive\Programming\Python\figs'
 
 # Target area
 low = 1
@@ -149,7 +149,7 @@ def build_relational_model(ones, tens, hundreds):
   full_model = K.Model(data_in,[hundreds_out, tens_out, ones_out])
   for model in [ones, tens, hundreds, full_model]:
     model.compile(K.optimizers.Adadelta(),loss = K.losses.CategoricalCrossentropy())
-  return full_model, ones, tens, hundreds
+  return full_model, hundreds, tens, ones
 
 def train_model(model, epochs, digit):
   # Digit is which digit output you're looking at
@@ -213,8 +213,6 @@ def param_search():
           title = f'{name}, Epoch {epoch_n}'
           plot_fineres(model, 1, 500, digit, title, filename)
       ID += 1
-            
-
 
 # Plots the model structure using keras
 plot_model = lambda model: tf.keras.utils.plot_model(
@@ -236,11 +234,12 @@ if __name__ == '__main__':
   plot_model(model)
   
   # Example relational model, including training for full and ones
-  full_model, ones_model, tens_model, hundreds_model = \
+  full_model, hundreds_model, tens_model, ones_model = \
     build_relational_model([10]*2, [10]*2, [10]*2)
   train_model(full_model, 10, 0)
   plot_all_digits(full_model)
   plot_model(full_model)
   
   train_model(ones_model, 10, 3)
+  # Note that only the ones has changed
   plot_all_digits(full_model)
